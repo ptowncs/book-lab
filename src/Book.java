@@ -8,7 +8,11 @@ public class Book
 {
   public String pigLatin(String word)
   {
-
+   if (word.startsWith("a") != -1 || word.startsWith("e") != -1 || word.startsWith("i") != -1 || word.startsWith("o") != -1|| word.startsWith("u") != -1){
+     return word + "yay";
+   }else if{
+    
+   }
   }
   
   public int endPunctuation(String word)  //return the index of where the punctuation is at the end of a String. If it is all punctuation return 0, if there is no punctuation return -1
