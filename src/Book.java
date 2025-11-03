@@ -4,35 +4,45 @@
 //There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
 //    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
 
-public class Book
-{
-  public String pigLatin(String word)
-  {
-   if (word.startsWith("a") != -1 || word.startsWith("e") != -1 || word.startsWith("i") != -1 || word.startsWith("o") != -1|| word.startsWith("u") != -1){
-     return word + "yay";
-   }else if{
+public class Book {
+  public String pigLatin(String word) {
+    String vowelString = "aeiouy";
+    String numberString = " 123456789";
     
-   }
+    if (word.length() == 0 || numberString.contains(word.substring(0, 1))){
+      return word;
+    }
+    if (vowelString.contains((word.substring(0,1)).toLowerCase())){
+      return word + "yay";
+    } else {
+      int index = 0;
+      for (int i = 0; i < word.length(); i++) {
+        if (vowelString.contains((word.substring(i,i+1)).toLowerCase())) {
+          index = i;
+          break;
+        }
+      }
+      return word.substring(index) + word.substring(0,index) + "ay";
+    }
   }
-  
-  public int endPunctuation(String word)  //return the index of where the punctuation is at the end of a String. If it is all punctuation return 0, if there is no punctuation return -1
+
+  public int endPunctuation(String word) // return the index of where the punctuation is at the end of a String. If it
+                                         // is all punctuation return 0, if there is no punctuation return -1
   {
 
     return -1;
   }
 
-  public String translateWord(String word)    //to share with class
+  public String translateWord(String word) // to share with class
   {
     String convertedWord = "";
 
     return convertedWord;
   }
 
-  public String translateSentence(String sentence)
-  {
+  public String translateSentence(String sentence) {
     String retSentence = "";
-
 
     return retSentence;
   }
-}  
+}
