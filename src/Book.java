@@ -64,7 +64,19 @@ public class Book {
 
   public String translateSentence(String sentence) {
     String retSentence = "";
+    int lastSpaceIndex = 0;
+    int[] capIndex =  new int[sentence.length()];
+    for(int i = 0; i < sentence.length(); i++){
+      if(Character.isUpperCase(sentence.charAt(i))){
+        
+      }
+      if(sentence.substring(i, i+1).equals(" ") || i == sentence.length()-1){
+        retSentence += translateWord(sentence.substring(lastSpaceIndex+1,i) + " ");
+        lastSpaceIndex = i;
+      }
 
-    return retSentence;
+      }
+       return retSentence;
+    }
   }
-}
+
