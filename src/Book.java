@@ -50,9 +50,16 @@ public class Book {
 
   public String translateWord(String word) // to share with class
   {
-    String convertedWord = "";
+    String result;
+    int punct= endPunctuation(word);
+    if(punct != -1){
+      result = pigLatin(word.substring(0, punct)) + word.substring(punct);
+    }else{
+    result = pigLatin(word);
 
-    return convertedWord;
+    }
+
+    return result;
   }
 
   public String translateSentence(String sentence) {
