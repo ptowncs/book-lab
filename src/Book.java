@@ -7,7 +7,7 @@
 public class Book {
   public String pigLatin(String word) {
     String vowelString = "aeiouy";
-    String numberString = " 123456789";
+    String numberString = "123456789";
 
     if (word.length() == 0 || numberString.contains(word.substring(0, 1))) {
       return word;
@@ -65,14 +65,11 @@ public class Book {
   public String translateSentence(String sentence) {
     String retSentence = "";
     int lastSpaceIndex = 0;
-    int[] capIndex =  new int[sentence.length()];
     for(int i = 0; i < sentence.length(); i++){
-      if(Character.isUpperCase(sentence.charAt(i))){
-        
-      }
+ 
       if(sentence.substring(i, i+1).equals(" ") || i == sentence.length()-1){
-        retSentence += translateWord(sentence.substring(lastSpaceIndex+1,i) + " ");
-        lastSpaceIndex = i;
+        retSentence += translateWord(sentence.substring(lastSpaceIndex,i+1)) + " ";
+        lastSpaceIndex = i+1;
       }
 
       }
