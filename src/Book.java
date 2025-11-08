@@ -8,11 +8,11 @@ public class Book {
   public String pigLatin(String word) {
     String vowelString = "aeiouy";
     String numberString = "123456789";
-
+    word = word.toLowerCase();
     if (word.length() == 0 || numberString.contains(word.substring(0, 1))) {
       return word;
     }
-    if (vowelString.contains((word.substring(0, 1)).toLowerCase())) {
+    if (vowelString.contains((word.substring(0, 1)))) {
       return word + "yay";
     } else {
       int index = 0;
@@ -58,6 +58,9 @@ public class Book {
     result = pigLatin(word);
 
     }
+    if (Character.isUpperCase(word.charAt(0))) {
+       result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
+    }
 
     return result;
   }
@@ -66,10 +69,9 @@ public class Book {
     String retSentence = "";
     int lastSpaceIndex = 0;
     for(int i = 0; i < sentence.length(); i++){
- 
       if(sentence.substring(i, i+1).equals(" ") || i == sentence.length()-1){
-        retSentence += translateWord(sentence.substring(lastSpaceIndex,i+1)) + " ";
-        lastSpaceIndex = i+1;
+        retSentence += translateWord(sentence.substring(lastSpaceIndex,i+1));
+        lastSpaceIndex = i+1; 
       }
 
       }
