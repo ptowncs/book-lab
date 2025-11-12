@@ -3,8 +3,32 @@
 //Words will be separated by spaces. 
 //There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
 //    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
-
+import java.io.IOException;
+import java.util.Scanner;
+import java.net.URL;
 public class Book {
+  private String book;
+  public Book(String url){
+    readBook(url);
+  }
+  private void readBook(String link){
+    try{
+      URL url = new URL(link);
+      Scanner s = new Scanner(url.openStream());
+
+      while(s.hasNext()){
+        String text = s.nextLine();
+
+        //System.out.println(text);
+        if(text.contains("*** START OF THE PROJECT GUTENBERG EBOOK") || !(text.contains("*** END OF THE PROJECT GUTENBERG EBOOK "))){
+          book+= text;
+        }
+      }
+      System.out.println(book);
+    }catch(IOException ex){
+      ex.printStackTrace();
+    }
+  }
   public String pigLatin(String word) {
     String vowelString = "aeiouy";
     String numberString = "123456789";
@@ -77,5 +101,6 @@ public class Book {
       }
        return retSentence;
     }
+     
   }
 
