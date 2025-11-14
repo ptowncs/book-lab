@@ -6,29 +6,34 @@
 import java.io.IOException;
 import java.util.Scanner;
 import java.net.URL;
+
 public class Book {
   private String book;
-  public Book(String url){
+
+  public Book(String url) {
     readBook(url);
   }
-  private void readBook(String link){
-    try{
+
+  private void readBook(String link) {
+    try {
       URL url = new URL(link);
       Scanner s = new Scanner(url.openStream());
 
-      while(s.hasNext()){
+      while (s.hasNext()) {
         String text = s.nextLine();
 
-        //System.out.println(text);
-        if(text.contains("*** START OF THE PROJECT GUTENBERG EBOOK") || !(text.contains("*** END OF THE PROJECT GUTENBERG EBOOK "))){
-          book+= text;
+        // System.out.println(text);
+        boolean addText = text.contains("*** START OF THE PROJECT GUTENBERG EBOOK")^ !(text.contains("*** END OF THE PROJECT GUTENBERG EBOOK"));
+        if (addText) {
+          book += text;
         }
       }
       System.out.println(book);
-    }catch(IOException ex){
+    } catch (IOException ex) {
       ex.printStackTrace();
     }
   }
+
   public String pigLatin(String word) {
     String vowelString = "aeiouy";
     String numberString = "123456789";
@@ -52,21 +57,21 @@ public class Book {
 
   public int endPunctuation(String word) // return the index of where the punctuation is at the end of a String. If it
                                          // is all punctuation return 0, if there is no punctuation return -1
-  { 
+  {
     boolean alpha = false;
-    for(int i = 0; i< word.length(); i++){
-      if(Character.isAlphabetic(word.charAt(i))){
-          alpha = true;
-      }else if (!Character.isAlphabetic(word.charAt(i))){
-        if(alpha){
-        alpha = false;
-        return i;
+    for (int i = 0; i < word.length(); i++) {
+      if (Character.isAlphabetic(word.charAt(i))) {
+        alpha = true;
+      } else if (!Character.isAlphabetic(word.charAt(i))) {
+        if (alpha) {
+          alpha = false;
+          return i;
         }
       }
     }
-    if(alpha){
+    if (alpha) {
       return -1;
-    }else{
+    } else {
       return 0;
     }
 
@@ -75,15 +80,15 @@ public class Book {
   public String translateWord(String word) // to share with class
   {
     String result;
-    int punct= endPunctuation(word);
-    if(punct != -1){
+    int punct = endPunctuation(word);
+    if (punct != -1) {
       result = pigLatin(word.substring(0, punct)) + word.substring(punct);
-    }else{
-    result = pigLatin(word);
+    } else {
+      result = pigLatin(word);
 
     }
     if (Character.isUpperCase(word.charAt(0))) {
-       result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
+      result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
     }
 
     return result;
@@ -92,15 +97,14 @@ public class Book {
   public String translateSentence(String sentence) {
     String retSentence = "";
     int lastSpaceIndex = 0;
-    for(int i = 0; i < sentence.length(); i++){
-      if(sentence.substring(i, i+1).equals(" ") || i == sentence.length()-1){
-        retSentence += translateWord(sentence.substring(lastSpaceIndex,i+1));
-        lastSpaceIndex = i+1; 
+    for (int i = 0; i < sentence.length(); i++) {
+      if (sentence.substring(i, i + 1).equals(" ") || i == sentence.length() - 1) {
+        retSentence += translateWord(sentence.substring(lastSpaceIndex, i + 1));
+        lastSpaceIndex = i + 1;
       }
 
-      }
-       return retSentence;
     }
-     
+    return retSentence;
   }
 
+}
