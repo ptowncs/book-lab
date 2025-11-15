@@ -3,6 +3,7 @@
 //Words will be separated by spaces. 
 //There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
 //    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.net.URL;
@@ -18,17 +19,38 @@ public class Book {
     try {
       URL url = new URL(link);
       Scanner s = new Scanner(url.openStream());
+      boolean startReading = false;
 
-      while (s.hasNext()) {
+      book = "";
+
+      while (s.hasNextLine()) {
         String text = s.nextLine();
 
-        // System.out.println(text);
-        boolean addText = text.contains("*** START OF THE PROJECT GUTENBERG EBOOK")^ !(text.contains("*** END OF THE PROJECT GUTENBERG EBOOK"));
-        if (addText) {
-          book += text;
+        if (text.contains("*** START OF THE PROJECT GUTENBERG EBOOK")) {
+          startReading = true;
+          continue;
+        }
+        if (text.contains("*** END OF THE PROJECT GUTENBERG EBOOK")) {
+          startReading = false;
+          break;
+        }
+        if (startReading) {
+          book += text + "\n";
         }
       }
-      System.out.println(book);
+      // After you finish reading the book text into the 'book' string:
+      int numWords = book.trim().split("\\s+").length;
+      System.out.println("Word count: " + numWords);
+
+      try (FileWriter writer = new FileWriter("TranslatedBook.txt")) {
+        Scanner lineScanner = new Scanner(book);
+        while (lineScanner.hasNextLine()) {
+          String line = lineScanner.nextLine();
+          writer.write(translateSentence(line) + "\n");
+        }
+        lineScanner.close();
+      }
+
     } catch (IOException ex) {
       ex.printStackTrace();
     }
@@ -36,7 +58,7 @@ public class Book {
 
   public String pigLatin(String word) {
     String vowelString = "aeiouy";
-    String numberString = "123456789";
+    String numberString = "0123456789";
     word = word.toLowerCase();
     if (word.length() == 0 || numberString.contains(word.substring(0, 1))) {
       return word;
@@ -58,23 +80,26 @@ public class Book {
   public int endPunctuation(String word) // return the index of where the punctuation is at the end of a String. If it
                                          // is all punctuation return 0, if there is no punctuation return -1
   {
-    boolean alpha = false;
+   boolean hasAlpha = false;
     for (int i = 0; i < word.length(); i++) {
-      if (Character.isAlphabetic(word.charAt(i))) {
-        alpha = true;
-      } else if (!Character.isAlphabetic(word.charAt(i))) {
-        if (alpha) {
-          alpha = false;
-          return i;
-        }
+      if(Character.isAlphabetic(word.charAt(i))) {
+        hasAlpha = true;
       }
     }
-    if (alpha) {
-      return -1;
-    } else {
-      return 0;
-    }
 
+    int punctIndex = -1;
+    for(int i = word.length()-1; i >= 0;i--){
+      if(Character.isAlphabetic(word.charAt(i))){
+        break;
+      } else {
+        punctIndex = i;
+      }
+    }
+    if (!hasAlpha){
+      return 0;
+    } else{
+      return punctIndex;
+    }
   }
 
   public String translateWord(String word) // to share with class
@@ -95,16 +120,18 @@ public class Book {
   }
 
   public String translateSentence(String sentence) {
-    String retSentence = "";
-    int lastSpaceIndex = 0;
-    for (int i = 0; i < sentence.length(); i++) {
-      if (sentence.substring(i, i + 1).equals(" ") || i == sentence.length() - 1) {
-        retSentence += translateWord(sentence.substring(lastSpaceIndex, i + 1));
-        lastSpaceIndex = i + 1;
-      }
+    String[] words = sentence.split("\\s+"); // Split on all whitespace
+    StringBuffer retSentence = new StringBuffer();
 
+    for (int i = 0; i < words.length; i++) {
+      if (!words[i].isEmpty()) {
+        retSentence.append(translateWord(words[i]));
+      }
+      if (i < words.length - 1) {
+        retSentence.append(" ");
+      }
     }
-    return retSentence;
+    return retSentence.toString();
   }
 
 }
